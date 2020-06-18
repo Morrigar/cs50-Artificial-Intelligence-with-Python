@@ -61,7 +61,7 @@ def result(board, action):
     player = player(board)
     newboard = copy.deepcopy(board)
     for i, j in action:
-        if newboard[i][j] not EMPTY:
+        if newboard[i][j] is not EMPTY:
             raise Exception ('Action not valid.')
         else:
             newboard[i][j] = player
