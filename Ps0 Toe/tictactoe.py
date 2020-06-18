@@ -74,12 +74,40 @@ def result(board, action):
     return newboard
 
 
-
 def winner(board):
     """
     Returns the winner of the game, if there is one.
     """
-    raise NotImplementedError
+    #check if X wins by row.
+    for i in range (3):
+        if board[i][0] == X and board[i][1] == X and board[i][2] == X:
+            return X
+    #check for X win by column
+    for j in range (3):
+        if board [0][j] == X and board [1][j] == X and board [2][j] == X:
+            return X
+    #check for win by diaganol
+    if board [0][0] == X and board [1][1] == X and board [2][2] == X:
+        return X
+    if board [0][2] == X and board [1][1] == X and board [2][0] == X:
+        return X
+
+    #check if O wins by row.
+    for i in range (3):
+        if board[i][0] == O and board[i][1] == O and board[i][2] == O:
+            return O
+    #check for O win by column
+    for j in range (3):
+        if board [0][j] == O and board [1][j] == O and board [2][j] == O:
+            print(f'You got here through {j}')
+            return O
+    #check for win by diaganol
+    if board [0][0] == O and board [1][1] == O and board [2][2] == O:
+        return O
+    if board [0][2] == O and board [1][1] == O and board [2][0] == O:
+        return O
+
+    return None
 
 
 def terminal(board):
