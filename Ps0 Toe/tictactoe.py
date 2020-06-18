@@ -8,7 +8,7 @@ June, 2020.
 
 """
 
-
+import util
 import math
 
 X = "X"
@@ -99,7 +99,6 @@ def winner(board):
     #check for O win by column
     for j in range (3):
         if board [0][j] == O and board [1][j] == O and board [2][j] == O:
-            print(f'You got here through {j}')
             return O
     #check for win by diaganol
     if board [0][0] == O and board [1][1] == O and board [2][2] == O:
@@ -140,4 +139,22 @@ def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
+    #figure out whose turn it is.
+    turn = player(board)
+    #create a copy of the board for looping.
+    newboard = []
+    for row in board:
+        list = []
+        for item in row:
+            list.append(item)
+        newboard.append(list)
+
+    frontier = StackFrontier()
+
+    start = Node(newboard, parent = None, action = None )
+    frontier.add(start)
+
+    while utility(frontier.state)==0:
+
+
     raise NotImplementedError
