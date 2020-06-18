@@ -32,9 +32,9 @@ def player(board):
     count = 0
     for item in board:
         for i in range(len(item)):
-            if item[i] == 'x':
+            if item[i] == X:
                 count += 1
-            elif item[i] == 'o':
+            elif item[i] == O:
                 count -= 1
             else:
                 continue
@@ -58,7 +58,15 @@ def result(board, action):
     """
     Returns the board that results from making move (i, j) on the board.
     """
-    raise NotImplementedError
+    player = player(board)
+    newboard = copy.deepcopy(board)
+    for i, j in action:
+        if newboard[i][j] not EMPTY:
+            raise Exception ('Action not valid.')
+        else:
+            newboard[i][j] = player
+    return newboard
+
 
 
 def winner(board):
