@@ -58,13 +58,19 @@ def result(board, action):
     """
     Returns the board that results from making move (i, j) on the board.
     """
-    player = player(board)
-    newboard = copy.deepcopy(board)
-    for i, j in action:
-        if newboard[i][j] is not EMPTY:
-            raise Exception ('Action not valid.')
-        else:
-            newboard[i][j] = player
+    mark = player(board)
+    newboard = []
+    for row in board:
+        list = []
+        for item in row:
+            list.append(item)
+        newboard.append(list)
+    i = action [0]
+    j = action [1]
+    if newboard[i][j] is not EMPTY:
+        raise Exception ('Action not valid.')
+    else:
+        newboard[i][j] = mark
     return newboard
 
 
