@@ -119,26 +119,26 @@ def shortest_path(source, target):
         # check for target in film node.
         explored.add(node.state)
 
-        if node.state == target:
-            solution = []
-            while node.parent is not None:
-                solution.append((node.action, node.state))
-                node = node.parent
-            solution.reverse()
-            return solution
-        # neighbors = []
-        # for movie, actor in neighbors_for_person(node.state):
-        #     if actor not in neighbors:
-        #         neighbors.append(actor)
-        #
-        #     if target in neighbors:
-        #         solution = []
-        #         solution.append ((movie, target))
-        #         while node.parent is not None:
-        #             solution.append((node.action, node.state))
-        #             node = node.parent
-        #         solution.reverse()
-        #         return solution
+        # if node.state == target:
+        #     solution = []
+        #     while node.parent is not None:
+        #         solution.append((node.action, node.state))
+        #         node = node.parent
+        #     solution.reverse()
+        #     return solution
+        neighbors = []
+        for movie, actor in neighbors_for_person(node.state):
+            if actor not in neighbors:
+                neighbors.append(actor)
+
+            if target in neighbors:
+                solution = []
+                solution.append ((movie, target))
+                while node.parent is not None:
+                    solution.append((node.action, node.state))
+                    node = node.parent
+                solution.reverse()
+                return solution
 
         nodecounter=0
         for movie, actor in neighbors_for_person(node.state):
