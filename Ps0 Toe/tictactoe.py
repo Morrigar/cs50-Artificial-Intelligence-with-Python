@@ -37,7 +37,7 @@ def player(board):
                 count -= 1
             else:
                 continue
-    if count = 0:
+    if count == 0:
         return ('X')
     if count != 0:
         return ('O')
