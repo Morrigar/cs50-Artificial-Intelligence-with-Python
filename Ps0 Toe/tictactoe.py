@@ -1,6 +1,12 @@
 """
 Tic Tac Toe Player
+
+Original code by the amazing faculty of CS 50's intro to AI with Python.
+Other stuff is stuff by Kirk Sripinyo
+June, 2020.
+
 """
+
 
 import math
 
@@ -22,8 +28,19 @@ def player(board):
     """
     Returns player who has the next turn on a board.
     """
-    raise NotImplementedError
-
+    count = 0
+    for item in board:
+        for i in range(len(item)):
+            if item[i] == 'x':
+                count += 1
+            elif item[i] == 'o':
+                count -= 1
+            else:
+                continue
+    if count = 0:
+        return ('X')
+    if count != 0:
+        return ('O')
 
 def actions(board):
     """
