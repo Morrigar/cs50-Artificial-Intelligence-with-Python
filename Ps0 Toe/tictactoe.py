@@ -161,7 +161,7 @@ def minimax(board):
         v = 100
         moves = actions(board)
         for move in moves:
-            v = max(v, maxi(result(board, move)))
+            v = min(v, maxi(result(board, move)))
         # print(f'V = {v}')
         return v
 
