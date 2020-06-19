@@ -126,9 +126,9 @@ def utility(board):
     """
     utility = winner (board)
 
-    if utility = X:
+    if utility == X:
         return 1
-    if utility = O:
+    if utility == O:
         return -1
     else:
         return 0
@@ -139,22 +139,35 @@ def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
-    #figure out whose turn it is.
-    turn = player(board)
-    #create a copy of the board for looping.
-    newboard = []
-    for row in board:
-        list = []
-        for item in row:
-            list.append(item)
-        newboard.append(list)
+    def maxi(board):
+        #print ('Max called.')
+        if terminal(board):
+            # print (board)
+            # print (utility(board))
+            return utility(board)
+        v = -100
+        moves = actions(board)
+        for move in moves:
+            v = max(v, mini(result(board, move)))
+        print (f'V = {v}')
+        return v
 
-    frontier = StackFrontier()
+    def mini(board):
+        # print ('Min called.')
+        if terminal(board):
+            # print (board)
+            # print(utility(board))
+            return utility(board)
+        v = 100
+        moves = actions(board)
+        for move in moves:
+            v = max(v, maxi(result(board, move)))
+        # print(f'V = {v}')
+        return v
 
-    start = Node(newboard, parent = None, action = None )
-    frontier.add(start)
+    if player(board) == X:
+        maxi (board)
 
-    while utility(frontier.state)==0:
+    if player(board) == O:
+        mini (board)
 
-
-    raise NotImplementedError
