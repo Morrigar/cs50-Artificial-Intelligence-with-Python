@@ -1,7 +1,7 @@
 """
 Tic Tac Toe Player
 
-Original code by the amazing faculty of CS 50's intro to AI with Python.
+Skeleton code by the amazing faculty of CS 50's intro to AI with Python.
 Other stuff is stuff by KS
 
 June, 2020.
