@@ -182,7 +182,9 @@ def minimax(board):
         minv = -100
         moves = actions(board)
         for move in moves:
-            foo = mini (result(board, move))
+            print(f'Trying {move}.')
+            foo = maxi (result(board, move))
+            print (f'Move value: {foo}.')
             if foo > minv:
                 # print(f'Foo = {foo} and minv = {minv}.')
                 minv = foo
@@ -193,7 +195,9 @@ def minimax(board):
         minv = 100
         moves = actions(board)
         for move in moves:
+            print (f'Trying {move}.')
             foo = mini (result(board, move))
+            print (f'Move value: {foo}.')
             if foo < minv:
                 # print (f'Foo = {foo} and minv = {minv}.')
                 minv = foo
