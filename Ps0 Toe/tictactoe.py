@@ -141,16 +141,19 @@ def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
+    if terminal(board):
+        return None
+
     def printv(board):
         for item in board:
             print (item)
 
     def maxi(board):
-        print ('Max called with board:')
-        printv (board)
+        # print ('Max called with board:')
+        # printv (board)
         if terminal(board):
-            print ('Complete board returned value: ', end = '' )
-            print (utility(board))
+            # print ('Complete board returned value: ', end = '' )
+            # print (utility(board))
             return utility(board)
         v = -100
         moves = actions(board)
@@ -160,11 +163,11 @@ def minimax(board):
         return v
 
     def mini(board):
-        print ('Mini called with board:')
-        printv(board)
+        # print ('Mini called with board:')
+        # printv(board)
         if terminal(board):
-            print ('Complete board returned value: ', end = '' )
-            print(utility(board))
+            # print ('Complete board returned value: ', end = '' )
+            # print(utility(board))
             return utility(board)
         v = 100
         moves = actions(board)
@@ -173,21 +176,28 @@ def minimax(board):
         # print(f'Mini returned V = {v}')
         return v
 
-    if player(board) == X:   #trying to maximize score        bmove = ()
+    bmove = ()
+
+    if player(board) == X:   #trying to maximize score
         minv = -100
         moves = actions(board)
         for move in moves:
             foo = mini (result(board, move))
             if foo > minv:
+                # print(f'Foo = {foo} and minv = {minv}.')
+                minv = foo
+                # print (f'Setting best move from {bmove} to {move}.')
                 bmove = move
 
     if player(board) == O:   #trying to minimize score
-        bmove = ()
         minv = 100
         moves = actions(board)
         for move in moves:
             foo = mini (result(board, move))
             if foo < minv:
+                # print (f'Foo = {foo} and minv = {minv}.')
+                minv = foo
+                # print(f'Setting best move from {bmove} to {move}.')
                 bmove = move
 
     return bmove
