@@ -10,6 +10,7 @@ June, 2020.
 
 import util
 import math
+import random
 
 X = "X"
 O = "O"
@@ -135,6 +136,35 @@ def utility(board):
     else:
         return 0
 
+def printv(board):
+    for item in board:
+        print (item)
+
+def boardcopy(board):
+    copy = []
+    for row in board:
+        list = []
+        for i in range (3):
+            list.append(row[i])
+        copy.append(list)
+    return copy
+
+def mustblock(board):
+    if player(board) == X:
+        for move in actions(board):
+            newboard = boardcopy(board)
+            i, j = move
+            newboard [i][j] = O
+            if winner(newboard) == O:
+                return move
+    if player(board) == O:
+        for move in actions(board):
+            newboard = boardcopy(board)
+            i, j = move
+            newboard [i][j] = X
+            if winner(newboard) == X:
+                return move
+    return None
 
 
 def minimax(board):
@@ -143,10 +173,8 @@ def minimax(board):
     """
     if terminal(board):
         return None
-
-    def printv(board):
-        for item in board:
-            print (item)
+    if mustblock(board) is not None:
+        return mustblock(board)
 
     def maxi(board):
         # print ('Max called with board:')
@@ -176,7 +204,7 @@ def minimax(board):
         # print(f'Mini returned V = {v}')
         return v
 
-    bmove = ()
+    bmove = []
 
     if player(board) == X:   #trying to maximize score
         minv = -100
@@ -185,12 +213,19 @@ def minimax(board):
             print(f'Trying {move}.')
             foo = maxi (result(board, move))
             print (f'Move value: {foo}.')
-            if foo > minv:
+            if foo >= minv:
                 # print(f'Foo = {foo} and minv = {minv}.')
                 minv = foo
                 # print (f'Setting best move from {bmove} to {move}.')
+                bmove.append(move)
+        for move in bmove:
+            newboard = boardcopy(board)
+            i, j = move
+            newboard[i][j] = O
+            if winner(newboard) == O:
                 bmove = move
-
+                return bmove
+        return random.choice(bmove)
     if player(board) == O:   #trying to minimize score
         minv = 100
         moves = actions(board)
@@ -198,10 +233,18 @@ def minimax(board):
             print (f'Trying {move}.')
             foo = mini (result(board, move))
             print (f'Move value: {foo}.')
-            if foo < minv:
+            if foo == -1:
+                bmove.append(move)
+            elif foo <= minv:
                 # print (f'Foo = {foo} and minv = {minv}.')
                 minv = foo
                 # print(f'Setting best move from {bmove} to {move}.')
+                bmove.append(move)
+        for move in bmove:
+            newboard = boardcopy(board)
+            i, j = move
+            newboard[i][j] = X
+            if winner(newboard) == X:
                 bmove = move
-
-    return bmove
+                return bmove
+        return random.choice(bmove)

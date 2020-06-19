@@ -3,9 +3,9 @@ X = "X"
 O = "O"
 EMPTY = None
 
-boardwon1 = [[X,X,X],
+boardwon1 = [[O,O,X],
             [O,X,EMPTY],
-            [O,O,EMPTY]]
+            [X,X,EMPTY]]
 
 boardwon2 = [[X,X,EMPTY],
             [O,X,EMPTY],
@@ -18,6 +18,12 @@ tboard1 = [[X,O,X],
 tboard2 = [[X, EMPTY ,X ],
            [EMPTY, O, EMPTY],
            [EMPTY, EMPTY, EMPTY]]
+
+problem = [[O, EMPTY, EMPTY],
+           [EMPTY, EMPTY, EMPTY],
+           [X,X,EMPTY]]
+
+
 
 def pboard(board):
     for item in board:
