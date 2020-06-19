@@ -114,7 +114,9 @@ def terminal(board):
     Returns True if game is over, False otherwise.
     """
     terminal = winner(board)
-    if terminal == None:
+    movesleft = actions(board)
+
+    if terminal == None and len(movesleft) != 0:
         return False
     else:
         return True
@@ -139,35 +141,53 @@ def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
+    def printv(board):
+        for item in board:
+            print (item)
+
     def maxi(board):
-        #print ('Max called.')
+        print ('Max called with board:')
+        printv (board)
         if terminal(board):
-            # print (board)
-            # print (utility(board))
+            print ('Complete board returned value: ', end = '' )
+            print (utility(board))
             return utility(board)
         v = -100
         moves = actions(board)
         for move in moves:
             v = max(v, mini(result(board, move)))
-        print (f'V = {v}')
+        # print (f'Maxi returned V = {v}')
         return v
 
     def mini(board):
-        # print ('Min called.')
+        print ('Mini called with board:')
+        printv(board)
         if terminal(board):
-            # print (board)
-            # print(utility(board))
+            print ('Complete board returned value: ', end = '' )
+            print(utility(board))
             return utility(board)
         v = 100
         moves = actions(board)
         for move in moves:
             v = min(v, maxi(result(board, move)))
-        # print(f'V = {v}')
+        # print(f'Mini returned V = {v}')
         return v
 
-    if player(board) == X:
-        maxi (board)
+    if player(board) == X:   #trying to maximize score        bmove = ()
+        minv = -100
+        moves = actions(board)
+        for move in moves:
+            foo = mini (result(board, move))
+            if foo > minv:
+                bmove = move
 
-    if player(board) == O:
-        mini (board)
+    if player(board) == O:   #trying to minimize score
+        bmove = ()
+        minv = 100
+        moves = actions(board)
+        for move in moves:
+            foo = mini (result(board, move))
+            if foo < minv:
+                bmove = move
 
+    return bmove

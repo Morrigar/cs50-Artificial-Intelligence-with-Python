@@ -9,6 +9,6 @@ boardwon2 = [[X,X,EMPTY],
 
 tboard1 = [[X,O,X],
             [EMPTY,O,EMPTY],
-            [EMPTY,EMPTY,X]]
+            [O,EMPTY,X]]
 
 
