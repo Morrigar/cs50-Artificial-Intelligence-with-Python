@@ -198,21 +198,21 @@ def minimax(board):
     if player(board) == X:  # Maximizing player.
         maxval = -math.inf
         for move in actions(board):
-            print (f'Trying {move}')
+            # print (f'Trying {move}')
             moveval = mini (result(board, move), depth)
-            print (f'Move value: {moveval}')
+            # print (f'Move value: {moveval}')
             if moveval > maxval:
-                print (f'Adjusting maxval {maxval} to {moveval}')
+                # print (f'Adjusting maxval {maxval} to {moveval}')
                 maxval = moveval
                 bmove = move
     if player(board) == O:  #Minimizing player.
         minval = math.inf
         for move in actions(board):
-            print(f'Trying {move}')
+            # print(f'Trying {move}')
             moveval = maxi (result(board,move), depth)
-            print(f'Move value: {moveval}')
+            # print(f'Move value: {moveval}')
             if moveval < minval:
-                print (f'Adjusting minval {minval} to {moveval}.')
+                # print (f'Adjusting minval {minval} to {moveval}.')
                 minval = moveval
                 bmove = move
 
