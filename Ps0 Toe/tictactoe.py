@@ -184,6 +184,7 @@ def minimax(board):
         for move in actions(board):
             v = min (v, maxi(result(board,move), depth-1))
         return v
+
     bmove = ()
     if player(board) == X:  # Maximizing player.
         maxval = -math.inf
