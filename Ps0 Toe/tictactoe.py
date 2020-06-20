@@ -7,7 +7,6 @@ Other stuff is stuff by KS
 June, 2020.
 
 """
-
 import util
 import math
 import random
@@ -16,7 +15,6 @@ X = "X"
 O = "O"
 EMPTY = None
 
-
 def initial_state():
     """
     Returns starting state of the board.
@@ -24,7 +22,6 @@ def initial_state():
     return [[EMPTY, EMPTY, EMPTY],
             [EMPTY, EMPTY, EMPTY],
             [EMPTY, EMPTY, EMPTY]]
-
 
 def player(board):
     """
@@ -74,7 +71,6 @@ def result(board, action):
         newboard[i][j] = mark
     return newboard
 
-
 def winner(board):
     """
     Returns the winner of the game, if there is one.
@@ -92,7 +88,6 @@ def winner(board):
         return X
     if board [0][2] == X and board [1][1] == X and board [2][0] == X:
         return X
-
     #check if O wins by row.
     for i in range (3):
         if board[i][0] == O and board[i][1] == O and board[i][2] == O:
@@ -106,9 +101,7 @@ def winner(board):
         return O
     if board [0][2] == O and board [1][1] == O and board [2][0] == O:
         return O
-
     return None
-
 
 def terminal(board):
     """
@@ -122,13 +115,11 @@ def terminal(board):
     else:
         return True
 
-
 def utility(board):
     """
     Returns 1 if X has won the game, -1 if O has won, 0 otherwise.
     """
     utility = winner (board)
-
     if utility == X:
         return 1
     if utility == O:
@@ -136,36 +127,35 @@ def utility(board):
     else:
         return 0
 
-def printv(board):
-    for item in board:
-        print (item)
-
-def boardcopy(board):
-    copy = []
-    for row in board:
-        list = []
-        for i in range (3):
-            list.append(row[i])
-        copy.append(list)
-    return copy
-
-def mustblock(board):
-    if player(board) == X:
-        for move in actions(board):
-            newboard = boardcopy(board)
-            i, j = move
-            newboard [i][j] = O
-            if winner(newboard) == O:
-                return move
-    if player(board) == O:
-        for move in actions(board):
-            newboard = boardcopy(board)
-            i, j = move
-            newboard [i][j] = X
-            if winner(newboard) == X:
-                return move
-    return None
-
+# def printv(board):
+#     for item in board:
+#         print (item)
+#
+# def boardcopy(board):
+#     copy = []
+#     for row in board:
+#         list = []
+#         for i in range (3):
+#             list.append(row[i])
+#         copy.append(list)
+#     return copy
+#
+# def mustblock(board):
+#     if player(board) == X:
+#         for move in actions(board):
+#             newboard = boardcopy(board)
+#             i, j = move
+#             newboard [i][j] = O
+#             if winner(newboard) == O:
+#                 return move
+#     if player(board) == O:
+#         for move in actions(board):
+#             newboard = boardcopy(board)
+#             i, j = move
+#             newboard [i][j] = X
+#             if winner(newboard) == X:
+#                 return move
+#     return None
 
 def minimax(board):
     """
@@ -215,7 +205,6 @@ def minimax(board):
                 # print (f'Adjusting minval {minval} to {moveval}.')
                 minval = moveval
                 bmove = move
-
     return bmove
 
 
