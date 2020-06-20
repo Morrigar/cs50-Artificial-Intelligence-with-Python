@@ -179,7 +179,7 @@ def minimax(board):
         # print (f'Maxi called at depth {depth} with board:')
         # printv(board)
         if terminal (board) or depth == 0:
-            return utility(board) * depth
+            return utility(board) * (depth + 1)
         v = -math.inf
         for move in actions(board):
             v= max(v, mini(result(board,move), depth-1))
@@ -189,7 +189,7 @@ def minimax(board):
         # print (f'Mini called at depth {depth} with board:')
         # printv(board)
         if terminal (board) or depth == 0:
-            return utility(board) * depth
+            return utility(board) * (depth + 1)
         v = math.inf
         for move in actions(board):
             v = min (v, maxi(result(board,move), depth-1))
