@@ -172,6 +172,8 @@ def minimax(board):
     Returns the optimal action for the current player on the board.
     """
     depth = len (actions(board))
+    if depth == 9:
+        return random.choice(actions(board))
 
     def maxi (board, depth):
         # print (f'Maxi called at depth {depth} with board:')
