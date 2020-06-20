@@ -171,80 +171,57 @@ def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
-    if terminal(board):
-        return None
-    if mustblock(board) is not None:
-        return mustblock(board)
+    depth = len (actions(board))
 
-    def maxi(board):
-        # print ('Max called with board:')
-        # printv (board)
-        if terminal(board):
-            # print ('Complete board returned value: ', end = '' )
-            # print (utility(board))
-            return utility(board)
-        v = -100
-        moves = actions(board)
-        for move in moves:
-            v = max(v, mini(result(board, move)))
-        # print (f'Maxi returned V = {v}')
-        return v
-
-    def mini(board):
-        # print ('Mini called with board:')
+    def maxi (board, depth):
+        # print (f'Maxi called at depth {depth} with board:')
         # printv(board)
-        if terminal(board):
-            # print ('Complete board returned value: ', end = '' )
-            # print(utility(board))
-            return utility(board)
-        v = 100
-        moves = actions(board)
-        for move in moves:
-            v = min(v, maxi(result(board, move)))
-        # print(f'Mini returned V = {v}')
+        if terminal (board) or depth == 0:
+            return utility(board) * depth
+        v = -math.inf
+        for move in actions(board):
+            v= max(v, mini(result(board,move), depth-1))
         return v
 
-    bmove = []
+    def mini (board, depth):
+        # print (f'Mini called at depth {depth} with board:')
+        # printv(board)
+        if terminal (board) or depth == 0:
+            return utility(board) * depth
+        v = math.inf
+        for move in actions(board):
+            v = min (v, maxi(result(board,move), depth-1))
+        return v
+    bmove = ()
+    if player(board) == X:  # Maximizing player.
+        maxval = -math.inf
+        for move in actions(board):
+            print (f'Trying {move}')
+            moveval = mini (result(board, move), depth)
+            print (f'Move value: {moveval}')
+            if moveval > maxval:
+                print (f'Adjusting maxval {maxval} to {moveval}')
+                maxval = moveval
+                bmove = move
+    if player(board) == O:  #Minimizing player.
+        minval = math.inf
+        for move in actions(board):
+            print(f'Trying {move}')
+            moveval = maxi (result(board,move), depth)
+            print(f'Move value: {moveval}')
+            if moveval < minval:
+                print (f'Adjusting minval {minval} to {moveval}.')
+                minval = moveval
+                bmove = move
 
-    if player(board) == X:   #trying to maximize score
-        minv = -100
-        moves = actions(board)
-        for move in moves:
-            print(f'Trying {move}.')
-            foo = maxi (result(board, move))
-            print (f'Move value: {foo}.')
-            if foo >= minv:
-                # print(f'Foo = {foo} and minv = {minv}.')
-                minv = foo
-                # print (f'Setting best move from {bmove} to {move}.')
-                bmove.append(move)
-        for move in bmove:
-            newboard = boardcopy(board)
-            i, j = move
-            newboard[i][j] = O
-            if winner(newboard) == O:
-                bmove = move
-                return bmove
-        return random.choice(bmove)
-    if player(board) == O:   #trying to minimize score
-        minv = 100
-        moves = actions(board)
-        for move in moves:
-            print (f'Trying {move}.')
-            foo = mini (result(board, move))
-            print (f'Move value: {foo}.')
-            if foo == -1:
-                bmove.append(move)
-            elif foo <= minv:
-                # print (f'Foo = {foo} and minv = {minv}.')
-                minv = foo
-                # print(f'Setting best move from {bmove} to {move}.')
-                bmove.append(move)
-        for move in bmove:
-            newboard = boardcopy(board)
-            i, j = move
-            newboard[i][j] = X
-            if winner(newboard) == X:
-                bmove = move
-                return bmove
-        return random.choice(bmove)
+    return bmove
+
+
+
+
+
+
+
+
+
+
