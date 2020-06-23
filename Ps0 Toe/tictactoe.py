@@ -140,33 +140,6 @@ def printv(board):
     for item in board:
         print (item)
 
-def boardcopy(board):
-    copy = []
-    for row in board:
-        list = []
-        for i in range (3):
-            list.append(row[i])
-        copy.append(list)
-    return copy
-
-def mustblock(board):
-    if player(board) == X:
-        for move in actions(board):
-            newboard = boardcopy(board)
-            i, j = move
-            newboard [i][j] = O
-            if winner(newboard) == O:
-                return move
-    if player(board) == O:
-        for move in actions(board):
-            newboard = boardcopy(board)
-            i, j = move
-            newboard [i][j] = X
-            if winner(newboard) == X:
-                return move
-    return None
-
-
 def minimax(board):
     """
     Returns the optimal action for the current player on the board.
