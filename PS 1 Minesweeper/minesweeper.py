@@ -234,6 +234,15 @@ class MinesweeperAI():
 
 
 game = Minesweeper()
+for i in range(game.height):
+    row = []
+    for j in range(game.width):
+        game.board[i][j] = False
+
+game.board[1][1] = True
+game.board[2][2] = True
+
+
 hal = MinesweeperAI()
 
 hal.add_knowledge((0,1),game.nearby_mines((0,1)))
@@ -242,3 +251,6 @@ hal.add_knowledge((0,1),game.nearby_mines((0,1)))
 #hal.add_knowledge((0,2), 1)
 
 #hal.add_knowledge((2,1), 2)
+
+tset = {1,2,3,4,5}
+tset2 = {2,3,4}
