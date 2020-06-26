@@ -7,7 +7,6 @@ Other stuff is stuff by KS
 June, 2020.
 
 """
-
 import util
 import math
 import random
@@ -16,7 +15,6 @@ X = "X"
 O = "O"
 EMPTY = None
 
-
 def initial_state():
     """
     Returns starting state of the board.
@@ -24,7 +22,6 @@ def initial_state():
     return [[EMPTY, EMPTY, EMPTY],
             [EMPTY, EMPTY, EMPTY],
             [EMPTY, EMPTY, EMPTY]]
-
 
 def player(board):
     """
@@ -74,7 +71,6 @@ def result(board, action):
         newboard[i][j] = mark
     return newboard
 
-
 def winner(board):
     """
     Returns the winner of the game, if there is one.
@@ -92,7 +88,6 @@ def winner(board):
         return X
     if board [0][2] == X and board [1][1] == X and board [2][0] == X:
         return X
-
     #check if O wins by row.
     for i in range (3):
         if board[i][0] == O and board[i][1] == O and board[i][2] == O:
@@ -106,9 +101,7 @@ def winner(board):
         return O
     if board [0][2] == O and board [1][1] == O and board [2][0] == O:
         return O
-
     return None
-
 
 def terminal(board):
     """
@@ -122,23 +115,17 @@ def terminal(board):
     else:
         return True
 
-
 def utility(board):
     """
     Returns 1 if X has won the game, -1 if O has won, 0 otherwise.
     """
     utility = winner (board)
-
     if utility == X:
         return 1
     if utility == O:
         return -1
     else:
         return 0
-
-def printv(board):
-    for item in board:
-        print (item)
 
 def minimax(board):
     """
@@ -167,6 +154,7 @@ def minimax(board):
         for move in actions(board):
             v = min (v, maxi(result(board,move), depth-1))
         return v
+
     bmove = ()
     if player(board) == X:  # Maximizing player.
         maxval = -math.inf
@@ -188,7 +176,6 @@ def minimax(board):
                 # print (f'Adjusting minval {minval} to {moveval}.')
                 minval = moveval
                 bmove = move
-
     return bmove
 
 
