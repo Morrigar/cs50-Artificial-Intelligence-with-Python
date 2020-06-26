@@ -7,7 +7,7 @@ class Minesweeper():
     Minesweeper game representation
     """
 
-    def __init__(self, height=8, width=8, mines=8):
+    def __init__(self, height=3, width=3, mines=2):  #TODO set back to 8x8x8
 
         # Set initial width, height, and number of mines
         self.height = height
@@ -105,27 +105,32 @@ class Sentence():
         """
         Returns the set of all cells in self.cells known to be mines.
         """
-        raise NotImplementedError
+        if len(self.cells)==self.count:
+            return cells
 
     def known_safes(self):
         """
         Returns the set of all cells in self.cells known to be safe.
         """
-        raise NotImplementedError
+        if len(self.cells)==0:
+            return cells
 
     def mark_mine(self, cell):
         """
         Updates internal knowledge representation given the fact that
         a cell is known to be a mine.
         """
-        raise NotImplementedError
+        if cell in self.cells:
+            self.cells.remove(cell)
+            self.count -= 1
 
     def mark_safe(self, cell):
         """
         Updates internal knowledge representation given the fact that
         a cell is known to be safe.
         """
-        raise NotImplementedError
+        if cell in self.cells:
+            self.cells.remove(cell)
 
 
 class MinesweeperAI():
@@ -133,7 +138,7 @@ class MinesweeperAI():
     Minesweeper game player
     """
 
-    def __init__(self, height=8, width=8):
+    def __init__(self, height=3, width=3):  #Set to 3x3 for debugging and testing. #TODO set it back to 8x8
 
         # Set initial height and width
         self.height = height
@@ -182,7 +187,30 @@ class MinesweeperAI():
             5) add any new sentences to the AI's knowledge base
                if they can be inferred from existing knowledge
         """
-        raise NotImplementedError
+        self.moves_made.add(cell)
+        self.mark_safe(cell)
+        neighbors = set ()  #create a set of the neighbors for the sentence.
+        # Loop over all cells within one row and column of cell
+        for i in range(cell[0] - 1, cell[0] + 2):
+            for j in range(cell[1] - 1, cell[1] + 2):
+
+                # Ignore the cell itself
+                if (i, j) == cell or (i,j) in self.safes:
+                    continue
+
+                # Update count if cell in bounds
+                if 0 <= i < self.height and 0 <= j < self.width:
+                    neighbors.add((i,j))  #add the cell to the neighbor set.
+        newKnowledge = Sentence(neighbors, count)
+        for sentence in self.knowledge:
+            if sentence.cells.issubset(newKnowledge.cells):
+                #TODO add logic.
+                print (f'Existing sentence ({sentence.cells}) is subset of ({newKnowledge.cells}).')
+                continue
+            if newKnowledge.cells.issubset(sentence.cells):
+                print (f'New sentence ({newKnowledge.cells}) is subset of existing sentence ({sentence.cells}).')
+                continue
+        self.knowledge.append(newKnowledge)
 
     def make_safe_move(self):
         """
@@ -203,3 +231,14 @@ class MinesweeperAI():
             2) are not known to be mines
         """
         raise NotImplementedError
+
+
+game = Minesweeper()
+hal = MinesweeperAI()
+
+hal.add_knowledge((0,1),game.nearby_mines((0,1)))
+
+#hal.add_knowledge((0,1), 1)
+#hal.add_knowledge((0,2), 1)
+
+#hal.add_knowledge((2,1), 2)
