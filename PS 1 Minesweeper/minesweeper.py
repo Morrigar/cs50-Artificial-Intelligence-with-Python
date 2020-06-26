@@ -209,7 +209,13 @@ class MinesweeperAI():
                 self.mark_mine(cell)
                 return
 
-        for sentence in self.knowledge:                          # Check to see if there is knowledge that can be
+        knowledgeCopy = copy.deepcopy(self.knowledge)           # Copy the knowledge, then iterate over the knowledge
+        for i, sentence in enumerate(knowledgeCopy):            # and remove any Sentences without cells.
+            if not sentence.cells:
+                del self.knowledge[i]
+
+        knowledgeCopy = copy.deepcopy(self.knowledge)
+        for sentence in knowledgeCopy:                          # Check to see if there is knowledge that can be
             if sentence.cells.issubset(newKnowledge.cells):      # from existing sentences in the knowledge base.
                 print (f'Existing sentence ({sentence.cells}) is subset of ({newKnowledge.cells}).')
                 derivedSentence= Sentence(newKnowledge.cells.difference(sentence.cells),
@@ -252,6 +258,8 @@ class MinesweeperAI():
             return
         possibleMoves = self.safes.difference(self.mines)
         possibleMoves = possibleMoves.difference(self.moves_made)
+        if not possibleMoves:
+            return
         return possibleMoves.pop()
 
     def make_random_move(self):
