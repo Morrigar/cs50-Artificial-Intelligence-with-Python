@@ -8,7 +8,7 @@ class Minesweeper():
     Minesweeper game representation
     """
 
-    def __init__(self, height=3, width=3, mines=2):  #TODO set back to 8x8x8
+    def __init__(self, height=8, width=8, mines=8):
 
         # Set initial width, height, and number of mines
         self.height = height
@@ -139,7 +139,7 @@ class MinesweeperAI():
     Minesweeper game player
     """
 
-    def __init__(self, height=3, width=3):  #Set to 3x3 for debugging and testing. #TODO set it back to 8x8
+    def __init__(self, height=8, width=8):
 
         # Set initial height and width
         self.height = height
@@ -193,23 +193,33 @@ class MinesweeperAI():
         neighbors = set ()                                    # Create a set of the neighbors for the sentence.
         for i in range(cell[0] - 1, cell[0] + 2):             # Loop over all cells within one row and column of cell
             for j in range(cell[1] - 1, cell[1] + 2):
-                if (i, j) == cell or (i,j) in self.safes:     # Ignore the cell itself or if it is already in safe list.
+                if (i, j) == cell:     # Ignore the cell itself or if it is already in safe list.
                     continue
                 if 0 <= i < self.height and 0 <= j < self.width:  # Otherwise add cell to neighbors.
                     neighbors.add((i,j))
-        newKnowledge = Sentence(neighbors, count)                # Create the sentence.
 
-        if newKnowledge.count == 0:                              # If there are no mines in the count, mark all cells
-            for cell in newKnowledge.cells:                      # as safe.
-                self.mark_safe(cell)
-                return
+        if count == 0:                              # If there are no mines in the count, mark all cells
+            for item in neighbors:
+                self.mark_safe(item)
 
+        newKnowledge = Sentence(neighbors, count)  # Create the sentence.
         if len(newKnowledge.cells) == newKnowledge.count:        # If the amt of cells == the amount of mines, mark them
-            for cell in newKnowledge.cells:                      # all as mines.
-                self.mark_mine(cell)
+            for item in newKnowledge.cells:                      # all as mines.
+                self.mark_mine(item)
                 return
 
-        for sentence in self.knowledge:                          # Check to see if there is knowledge that can be
+        knowledgeCopy = copy.deepcopy(self.knowledge)           # Copy the knowledge
+        empties = []
+        for i, sentence in enumerate(knowledgeCopy):            # Mark the empty cells.
+            if not sentence.cells:
+                empties.append(i)
+        print (f'Empties = {empties}.')
+        if not not empties:                                     # iterate backwards over any empty values and remove
+            for i in reversed(empties):              # them from the knowledge base.
+                del self.knowledge[i]
+
+        knowledgeCopy = copy.deepcopy(self.knowledge)
+        for sentence in knowledgeCopy:                          # Check to see if there is knowledge that can be
             if sentence.cells.issubset(newKnowledge.cells):      # from existing sentences in the knowledge base.
                 print (f'Existing sentence ({sentence.cells}) is subset of ({newKnowledge.cells}).')
                 derivedSentence= Sentence(newKnowledge.cells.difference(sentence.cells),
@@ -252,6 +262,8 @@ class MinesweeperAI():
             return
         possibleMoves = self.safes.difference(self.mines)
         possibleMoves = possibleMoves.difference(self.moves_made)
+        if not possibleMoves:
+            return
         return possibleMoves.pop()
 
     def make_random_move(self):
@@ -277,7 +289,7 @@ for i in range(game.height):
     for j in range(game.width):
         game.board[i][j] = False
 
-game.board[1][1] = True
+game.board[1][7] = True
 game.board[2][2] = True
 
 
