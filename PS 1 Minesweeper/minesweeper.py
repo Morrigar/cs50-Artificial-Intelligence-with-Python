@@ -8,7 +8,7 @@ class Minesweeper():
     Minesweeper game representation
     """
 
-    def __init__(self, height=8, width=8, mines=8):  #TODO set back to 8x8x8
+    def __init__(self, height=8, width=8, mines=8):
 
         # Set initial width, height, and number of mines
         self.height = height
@@ -139,7 +139,7 @@ class MinesweeperAI():
     Minesweeper game player
     """
 
-    def __init__(self, height=8, width=8):  #Set to 3x3 for debugging and testing. #TODO set it back to 8x8
+    def __init__(self, height=8, width=8):
 
         # Set initial height and width
         self.height = height
