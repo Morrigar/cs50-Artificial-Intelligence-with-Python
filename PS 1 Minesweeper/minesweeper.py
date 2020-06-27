@@ -139,7 +139,7 @@ class MinesweeperAI():
     Minesweeper game player
     """
 
-    def __init__(self, height=8, width=8):
+    def __init__(self, height=4, width=4):
 
         # Set initial height and width
         self.height = height
@@ -163,6 +163,8 @@ class MinesweeperAI():
         self.mines.add(cell)
         for sentence in self.knowledge:
             sentence.mark_mine(cell)
+            if not sentence.cells:
+                self.knowledge.remove(sentence)
 
     def mark_safe(self, cell):
         """
@@ -172,6 +174,8 @@ class MinesweeperAI():
         self.safes.add(cell)
         for sentence in self.knowledge:
             sentence.mark_safe(cell)
+            if not sentence.cells:
+                self.knowledge.remove(sentence)
 
     def add_knowledge(self, cell, count):
         """
@@ -190,63 +194,94 @@ class MinesweeperAI():
         """
         self.moves_made.add(cell)
         self.mark_safe(cell)
+        print (f'Known Mines: {self.mines}')
         neighbors = set ()                                    # Create a set of the neighbors for the sentence.
         for i in range(cell[0] - 1, cell[0] + 2):             # Loop over all cells within one row and column of cell
             for j in range(cell[1] - 1, cell[1] + 2):
-                if (i, j) == cell:     # Ignore the cell itself or if it is already in safe list.
+                if (i, j) == cell or (i,j) in self.safes:     # Ignore the cell itself or if it is already in safe list.
                     continue
                 if 0 <= i < self.height and 0 <= j < self.width:  # Otherwise add cell to neighbors.
                     neighbors.add((i,j))
 
         if count == 0:                              # If there are no mines in the count, mark all cells
             for item in neighbors:
+                print (f'In initial pass, markings {item} as safe.')
                 self.mark_safe(item)
+            return
+
+        if len(neighbors) == count:
+            for item in neighbors:
+                print (f'In initial pass, marking {item} as a mine.')
+                self.mark_mine(item)
+            return
+
+        if len(neighbors) == 0:
+            return
 
         newKnowledge = Sentence(neighbors, count)  # Create the sentence.
-        if len(newKnowledge.cells) == newKnowledge.count:        # If the amt of cells == the amount of mines, mark them
-            for item in newKnowledge.cells:                      # all as mines.
-                self.mark_mine(item)
-                return
-
         knowledgeCopy = copy.deepcopy(self.knowledge)           # Copy the knowledge
-        empties = []
-        for i, sentence in enumerate(knowledgeCopy):            # Mark the empty cells.
-            if not sentence.cells:
-                empties.append(i)
-        print (f'Empties = {empties}.')
-        if not not empties:                                     # iterate backwards over any empty values and remove
-            for i in reversed(empties):              # them from the knowledge base.
-                del self.knowledge[i]
 
-        knowledgeCopy = copy.deepcopy(self.knowledge)
-        for sentence in knowledgeCopy:                          # Check to see if there is knowledge that can be
-            if sentence.cells.issubset(newKnowledge.cells):      # from existing sentences in the knowledge base.
-                print (f'Existing sentence ({sentence.cells}) is subset of ({newKnowledge.cells}).')
-                derivedSentence= Sentence(newKnowledge.cells.difference(sentence.cells),
+        for sentence in knowledgeCopy:
+            if not sentence.cells:
+                self.knowledge.remove(sentence)
+            if sentence.cells.issubset(newKnowledge.cells) and sentence.cells != newKnowledge.cells:      # from existing sentences in the knowledge base.
+                print (f'Subtracting {sentence} from {newKnowledge}.')
+                derivedSentence = Sentence(newKnowledge.cells.difference(sentence.cells),
                                                                                     newKnowledge.count - sentence.count)
+                print (f'Result {derivedSentence}')
                 if derivedSentence.count == 0:
-                    for cell in derivedSentence.cells:
-                        self.mark_safe(cell)
+                    for item in derivedSentence.cells:
+                        print (f'Adding {item} to safe cells.')
+                        self.mark_safe(item)
                 elif derivedSentence.count == len (derivedSentence.cells):
-                    for cell in derivedSentence.cells:
-                        self.mark_mine(cell)
+                    for item in derivedSentence.cells:
+                        print (f'Adding {item} to mines.')
+                        self.mark_mine(item)
                 else:
+                    print (f'Adding {derivedSentence} to Knowledge.')
                     self.knowledge.append(derivedSentence)
-            if newKnowledge.cells.issubset(sentence.cells):
-                print (f'New sentence ({newKnowledge.cells}) is subset of existing sentence ({sentence.cells}).')
+            if newKnowledge.cells.issubset(sentence.cells) and sentence.cells != newKnowledge.cells:
+                print(f'Subtracting {newKnowledge} from {sentence}.')
                 derivedSentence = Sentence(sentence.cells.difference(newKnowledge.cells),
                                                                                     sentence.count - newKnowledge.count)
+                print (f'Result: {derivedSentence}')
                 if derivedSentence.count == 0:
-                    for cell in derivedSentence.cells:
-                        self.mark_safe(cell)
+                    for item in derivedSentence.cells:
+                        print(f'Adding {item} to safe cells.')
+                        self.mark_safe(item)
                 elif derivedSentence.count == len(derivedSentence.cells):
-                    for cell in derivedSentence.cells:
-                        self.mark_mine(cell)
+                    for item in derivedSentence.cells:
+                        print(f'Adding {item} to mines.')
+                        self.mark_mine(item)
                 else:
+                    print (f'Adding {derivedSentence} to Knowledge.')
                     self.knowledge.append(derivedSentence)
 
         if newKnowledge not in self.knowledge:
             self.knowledge.append(newKnowledge)
+
+        for sentence in self.knowledge:
+            if not sentence.cells:
+                print ('In cleanup, removing empty sentence.')
+                self.knowledge.remove(sentence)
+            if len(sentence.cells)==sentence.count:
+                eraser = []
+                for item in sentence.cells:
+                    eraser.append(item)
+                for item in eraser:
+                    print(f'In cleanup, marking {item} as mine.')
+                    self.mark_mine(item)
+            if sentence.count == 0:
+                eraser = []
+                for item in sentence.cells:
+                    eraser.append(item)
+                for item in eraser:
+                    print (f'In cleanup, marking {item} as safe.')
+                    self.mark_safe(item)
+
+
+
+
 
 
     def make_safe_move(self):
@@ -260,11 +295,12 @@ class MinesweeperAI():
         """
         if not self.safes:
             return
-        possibleMoves = self.safes.difference(self.mines)
-        possibleMoves = possibleMoves.difference(self.moves_made)
+        possibleMoves = self.safes.difference(self.moves_made)
         if not possibleMoves:
             return
-        return possibleMoves.pop()
+        returnMove = possibleMoves.pop()
+        print (f'Chose {returnMove} as a safe move.')
+        return returnMove
 
     def make_random_move(self):
         """
@@ -289,7 +325,7 @@ for i in range(game.height):
     for j in range(game.width):
         game.board[i][j] = False
 
-game.board[1][7] = True
+game.board[1][3] = True
 game.board[2][2] = True
 
 
