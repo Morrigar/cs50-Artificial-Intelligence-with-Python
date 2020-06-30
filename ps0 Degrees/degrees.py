@@ -65,12 +65,15 @@ def main():
     again = True
     while again:
         source = person_id_for_name(input("Name: "))
-        if source is None:
-            sys.exit("Person not found.")
+        while source is None:
+            print("Person not found.")
+            source = person_id_for_name(input("Name: "))
+        print (f'Source performer is: {source}.')
         target = person_id_for_name(input("Name: "))
-        if target is None:
-            sys.exit("Person not found.")
-
+        while target is None:
+            print("Person not found.")
+            target = person_id_for_name(input("Name: "))
+        print (f'Looking or degrees of separation between: {people[source]["name"]} and {people[target]["name"]}.')
         path = shortest_path(source, target)
 
         if path is None:
