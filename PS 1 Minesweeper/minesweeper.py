@@ -316,6 +316,7 @@ class MinesweeperAI():
             i = random.randrange(self.height)
             j = random.randrange(self.width)
             move = (i, j)
+        print(f'Chose {move} as a random move.')
         return move
 
 
