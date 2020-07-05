@@ -57,7 +57,18 @@ def transition_model(corpus, page, damping_factor):
     linked to by `page`. With probability `1 - damping_factor`, choose
     a link at random chosen from all pages in the corpus.
     """
-    raise NotImplementedError
+    ans = {}
+    if len (corpus[page])==0:
+        ans = {key:1/len(corpus) for key in corpus.keys()}
+        return ans
+    for key in corpus.keys():
+        randomProb = (1 - damping_factor)/len(corpus)
+        choiceProb = damping_factor/len(corpus[page])
+        if key in corpus[page]:
+            ans [key] = randomProb + choiceProb
+        else:
+            ans [key] = randomProb
+    return ans
 
 
 def sample_pagerank(corpus, damping_factor, n):
@@ -69,7 +80,22 @@ def sample_pagerank(corpus, damping_factor, n):
     their estimated PageRank value (a value between 0 and 1). All
     PageRank values should sum to 1.
     """
-    raise NotImplementedError
+    ans = {}
+    for key in corpus.keys():
+        ans [key] = 0
+    startPage = random.choice([key for key in corpus.keys()])
+    transModel = transition_model(corpus, startPage, damping_factor)
+    ans [startPage] += 1
+    for i in range (n):
+        choices = [key for key in transModel.keys()]
+        weights = [weight for weight in transModel.values()]
+        choice = random.choices(choices, weights)[0]
+        ans [choice] += 1
+        transModel = transition_model(corpus, choice, damping_factor)
+    total = sum(ans.values())
+    for key in ans.keys():
+        ans [key] = ans[key]/total
+    return ans
 
 
 def iterate_pagerank(corpus, damping_factor):
@@ -81,8 +107,29 @@ def iterate_pagerank(corpus, damping_factor):
     their estimated PageRank value (a value between 0 and 1). All
     PageRank values should sum to 1.
     """
-    raise NotImplementedError
+    ans = {key:1/len(corpus) for key in corpus.keys()}  # Create answer dictionary.  ALl pageranks to 1/number of pages.
+    randChance = (1-damping_factor)/len(corpus)         # Caluculate the chance of randomly landing on the page.
+    stopCalc = False                                    # stopCalc is a flag for determiming when to stop iterating.
+    while not stopCalc:
+        newAns = {key: ans[key] for key in ans}
+        for page in corpus:
+            referrers = [key for key in corpus.keys() if page in corpus [key]]                                            # Make a list of referring pages.
+            sumPRi = 0
+            for rpage in referrers:
+                PRi = ans[rpage]
+                numLinks = len(corpus[rpage])
+                sumPRi += PRi/numLinks
+            newAns[page] = randChance + damping_factor * sumPRi
+        for key in ans.keys():
+            if abs(ans[key]-newAns[key]) < 0.001:
+                stopCalc = True
+            else:
+                stopCalc = False
+        ans = {key: newAns[key] for key in ans}
+    totalProb = sum (value for value in ans.values())
+    ans = {key:ans[key]/totalProb for key in ans}
 
+    return ans
 
 if __name__ == "__main__":
     main()
