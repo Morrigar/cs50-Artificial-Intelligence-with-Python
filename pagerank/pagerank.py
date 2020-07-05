@@ -108,15 +108,15 @@ def iterate_pagerank(corpus, damping_factor):
     PageRank values should sum to 1.
     """
     ans = {key:1/len(corpus) for key in corpus.keys()}  # Create answer dictionary.  ALl pageranks to 1/number of pages.
-    randChance = (1-damping_factor)/len(corpus)         # Caluculate the chance of randomly landing on the page.
-    stopCalc = False                                    # stopCalc is a flag for determiming when to stop iterating.
+    randChance = (1-damping_factor)/len(corpus)         # Calculate the chance of randomly landing on the page.
+    stopCalc = False                                    # stopCalc is a flag for determining when to stop iterating.
     while not stopCalc:
         newAns = {key: ans[key] for key in ans}
         for page in corpus:
-            referrers = [key for key in corpus.keys() if page in corpus [key]]                                            # Make a list of referring pages.
+            referrers = [key for key in corpus.keys() if page in corpus [key]]  # Make a list of referring pages.
             sumPRi = 0
-            for rpage in referrers:
-                PRi = ans[rpage]
+            for rpage in referrers:                                             # Calculate Sum PRi for all
+                PRi = ans[rpage]                                                # referring pages.
                 numLinks = len(corpus[rpage])
                 sumPRi += PRi/numLinks
             newAns[page] = randChance + damping_factor * sumPRi
@@ -125,9 +125,9 @@ def iterate_pagerank(corpus, damping_factor):
                 stopCalc = True
             else:
                 stopCalc = False
-        ans = {key: newAns[key] for key in ans}
-    totalProb = sum (value for value in ans.values())
-    ans = {key:ans[key]/totalProb for key in ans}
+        ans = {key: newAns[key] for key in ans}             # Adjust the iterated values before reiterating.
+    totalProb = sum (value for value in ans.values())       # Ensure the values are expressed as probabilities.
+    ans = {key:ans[key]/totalProb for key in ans}           # Set new answers to recalculated values.
 
     return ans
 
