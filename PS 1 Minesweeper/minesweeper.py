@@ -2,6 +2,8 @@ import itertools
 import random
 import copy
 
+#test
+
 
 class Minesweeper():
     """
