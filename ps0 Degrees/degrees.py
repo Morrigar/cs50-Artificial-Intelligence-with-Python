@@ -88,7 +88,7 @@ def main():
                 movie = movies[path[i + 1][0]]["title"]
                 print(f"{i + 1}: {person1} and {person2} starred in {movie}.")
 
-        restart = input ('Enter another pair (Y/N)? ')
+        restart = input ('Enter another pair (Y/N): ')
         if restart.lower()== 'n':
             again = False
 
